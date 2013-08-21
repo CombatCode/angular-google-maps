@@ -77,7 +77,8 @@
       this.selector = o.container;
       this.markers = [];
       this.options = o.options;
-      
+
+
       this.draw = function () {
         
         if (that.center == null) {
@@ -86,16 +87,82 @@
         }
         
         if (_instance == null) {
-          
+
           // Create a new map instance
           
           _instance = new google.maps.Map(that.selector, angular.extend(that.options, {
             center: that.center,
             zoom: that.zoom,
             draggable: that.draggable,
-            mapTypeId : google.maps.MapTypeId.ROADMAP
+            mapTypeId : 'custom-ki-style'
           }));
           
+          // Set colors
+          var featureOpts = [
+            {
+              "featureType": "road.local",
+              "elementType": "geometry.fill",
+              "stylers": [
+                { "color": "#a3dad7" }
+              ]
+            },{
+              "featureType": "road.local",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                { "color": "#5db0ad" }
+              ]
+            },{
+              "featureType": "road.arterial",
+              "elementType": "geometry.fill",
+              "stylers": [
+                { "color": "#78c4c1" }
+              ]
+            },{
+              "featureType": "road.arterial",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                { "color": "#4a9f9b" }
+              ]
+            },{
+              "featureType": "road.arterial",
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                { "color": "#c9fffc" }
+              ]
+            },{
+              "featureType": "road.highway",
+              "elementType": "geometry.fill",
+              "stylers": [
+                { "color": "#398e88" }
+              ]
+            },{
+              "featureType": "road.highway",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                { "color": "#226d69" }
+              ]
+            },{
+              "featureType": "road.highway",
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                { "color": "#ffffff" }
+              ]
+            },{
+              "featureType": "landscape.man_made",
+              "elementType": "geometry",
+              "stylers": [
+                { "color": "#fbfbf8" }
+              ]
+            }
+          ];
+          var styledMapOptions = {
+            name: 'Custom Style'
+          };
+          var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+
+          _instance.mapTypes.set('custom-ki-style', customMapType);
+
+
           google.maps.event.addListener(_instance, "dragstart",
               
               function () {
@@ -348,14 +415,14 @@
         if (!angular.isDefined(scope.center) || 
             (!angular.isDefined(scope.center.latitude) || 
                 !angular.isDefined(scope.center.longitude))) {
-        	
+          
           $log.error("angular-google-maps: could not find a valid center property");          
           return;
         }
         
         if (!angular.isDefined(scope.zoom)) {
-        	$log.error("angular-google-maps: map zoom property not set");
-        	return;
+          $log.error("angular-google-maps: map zoom property not set");
+          return;
         }
         
         angular.element(element).addClass("angular-google-map");
