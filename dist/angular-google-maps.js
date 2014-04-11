@@ -2447,7 +2447,10 @@ Nick Baugh - https://github.com/niftylettuce
 
         link: function(scope, element, attrs) {
           var dragging, el, eventName, getEventHandler, opts, settingCenterFromScope, type, _m,
-            _this = this;
+              customMapType,
+              styledMapOptions,
+              featureOpts,
+              _this = this;
           if (!angular.isDefined(scope.center) || (!angular.isDefined(scope.center.latitude) || !angular.isDefined(scope.center.longitude))) {
             $log.error("angular-google-maps: could not find a valid center property");
             return;
@@ -2479,8 +2482,77 @@ Nick Baugh - https://github.com/niftylettuce
             center: new google.maps.LatLng(scope.center.latitude, scope.center.longitude),
             draggable: isTrue(attrs.draggable),
             zoom: scope.zoom,
-            bounds: scope.bounds
+            bounds: scope.bounds,
+            mapTypeId : 'custom-stxnext-style'
           }));
+
+
+            styledMapOptions = {
+                name: 'Custom Style'
+            };
+
+            // Set colors
+            featureOpts = [
+            {
+              "featureType": "road.local",
+              "elementType": "geometry.fill",
+              "stylers": [
+                { "color": "#a3dad7" }
+              ]
+            },{
+              "featureType": "road.local",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                { "color": "#5db0ad" }
+              ]
+            },{
+              "featureType": "road.arterial",
+              "elementType": "geometry.fill",
+              "stylers": [
+                { "color": "#78c4c1" }
+              ]
+            },{
+              "featureType": "road.arterial",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                { "color": "#4a9f9b" }
+              ]
+            },{
+              "featureType": "road.arterial",
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                { "color": "#c9fffc" }
+              ]
+            },{
+              "featureType": "road.highway",
+              "elementType": "geometry.fill",
+              "stylers": [
+                { "color": "#398e88" }
+              ]
+            },{
+              "featureType": "road.highway",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                { "color": "#226d69" }
+              ]
+            },{
+              "featureType": "road.highway",
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                { "color": "#ffffff" }
+              ]
+            },{
+              "featureType": "landscape.man_made",
+              "elementType": "geometry",
+              "stylers": [
+                { "color": "#fbfbf8" }
+              ]
+            }
+            ];
+
+            customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+            _m.mapTypes.set('custom-stxnext-style', customMapType);
+
           dragging = false;
           google.maps.event.addListener(_m, "dragstart", function() {
             dragging = true;
